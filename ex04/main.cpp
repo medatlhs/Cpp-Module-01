@@ -4,7 +4,7 @@
 std::string ft_replace(int startPos, int len, std::string line, std::string str)
 {
     int copiedChars = 0;
-    for (int i = 0; i < str.length() ;i++, startPos++, copiedChars++)
+    for (int i = 0; i < str.length(); i++, startPos++, copiedChars++)
         line[startPos] = str[i];
     if (copiedChars < len)
         line.erase(startPos, len - copiedChars);
@@ -15,13 +15,13 @@ std::string checkReplace(std::string s1, std::string s2, std::string line)
 {
     for (int i = 0; i < line.length(); i++)
     {
-        int k = 0;
         int startPos = -1;
         int endPos = -1;
 
-        if (line[i] == s1[k])
+        if (line[i] == s1[0])
         {
             startPos = i;
+            int k;
             for (k = 0; s1[k] == line[i] && i < line.length(); k++, i++) { }
             if (s1[k] == '\0')
             {
