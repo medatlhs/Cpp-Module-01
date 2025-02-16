@@ -1,44 +1,26 @@
 #include <iostream>
 #include <fstream>
 
-std::string ft_replace(int startPos, int len, std::string line, std::string str)
+std::string ft_replace(std::string oldStr, std::string newStr, std::string line)
 {
-    int copiedChars = 0;
-    for (int i = 0; i < str.length(); i++, startPos++, copiedChars++)
-        line[startPos] = str[i];
-    if (copiedChars < len)
-        line.erase(startPos, len - copiedChars);
-    return (line);
-}
-
-std::string checkReplace(std::string s1, std::string s2, std::string line)
-{
-    for (int i = 0; i < line.length(); i++)
+    size_t pos = 0;
+    while (true)
     {
-        int startPos = -1;
-        int endPos = -1;
-
-        if (line[i] == s1[0])
-        {
-            startPos = i;
-            int k;
-            for (k = 0; s1[k] == line[i] && i < line.length(); k++, i++) { }
-            if (s1[k] == '\0')
-            {
-                endPos = i;
-                line = ft_replace(startPos, endPos - startPos, line, s2);
-                i = startPos + s2.length() - 1;
-            }
-        }
+        pos = line.find(oldStr, pos);
+        if (pos == std::string::npos)
+            break ;
+        line.erase(pos, oldStr.length());
+        line.insert(pos, newStr);
+        pos += newStr.length();
     }
-    return line;
+    return line; 
 }
 
 int main(int argc, char *argv[])
 {
     if (argc != 4) {
         std::cout << "Wrong number of arguments!\n";
-        return 1;
+        return (1);
     }
     
     std::fstream infile;
@@ -46,17 +28,21 @@ int main(int argc, char *argv[])
     std::string  outfileName = argv[1];
 
     infile.open(argv[1], std::ios::in);
-    if (!infile.is_open())
+    if (!infile.is_open()) {
         std::cout << "Error opening infile\n";
+        return (1);
+    }
 
-    outfile.open(outfileName.append(".replace.txt"), std::ios::out | std::ios::trunc);
-    if (!outfile.is_open())
+    outfile.open(outfileName.append(".replace"), std::ios::out | std::ios::trunc);
+    if (!outfile.is_open()) {
         std::cout << "Error opening outfile\n";
+        return (1);
+    }
 
     std::string  line;
     while (getline(infile, line)) {
-        std::string newLine = checkReplace(argv[2], argv[3], line);
-        newLine += "\n"; 
+        std::string newLine = ft_replace(argv[2], argv[3], line);
+        newLine += "\n";
         outfile << newLine;
     }    
     return 0;
